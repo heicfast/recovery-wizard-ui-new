@@ -14,7 +14,7 @@ Honest accounting against the session mandate.
 | No UI-side backend logic         | connector called only via queries/ (arch-lint A1 + eslint zones + ast-grep, all green)                                                                      |
 | No dead controls                 | unavailable actions disabled with truthful reasons (open-location needs engine; mid-scan recovery gated by contract); knip 0 findings after session-2 purge |
 | No TODO/placeholder comments     | grep clean (docs' roadmap items are tracked work, not stubs)                                                                                                |
-| Tests green                      | 52/52 Vitest; Playwright spec written + config wired; CI workflows complete                                                                                 |
+| Tests green                      | 59/59 Vitest (incl. i18n resource-integrity); Playwright smoke + acceptance suite wired; CI workflows complete                                                                                 |
 | Budgets                          | bundle gate PASS; perf budgets measured where possible (filter <200 ms asserted)                                                                            |
 
 ## Honest limitations (all tracked, none hidden)

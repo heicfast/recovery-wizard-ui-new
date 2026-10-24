@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   smoke:
     runs-on: windows-latest
@@ -32,7 +36,7 @@ jobs:
         env:
           VITE_CONNECTOR: mock
 
-      - name: Run UI smoke (preview server + golden path)
+      - name: Run UI smoke (preview server + golden path + acceptance suite)
         run: pnpm e2e
         env:
           CI: 'true'
@@ -44,6 +48,7 @@ jobs:
           name: smoke-screens
           path: test-results/
           retention-days: 7
+          if-no-files-found: ignore
 
       - name: Upload Playwright report
         if: failure()
@@ -55,7 +60,7 @@ jobs:
 
   tauri-debug-build:
     runs-on: windows-latest
-    continue-on-error: true
+    # A linking failure here is a real regression — no masked failures.
     steps:
       - uses: actions/checkout@v4
 

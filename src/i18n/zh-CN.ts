@@ -292,6 +292,14 @@ export const zhCN: TranslationSchema = {
   },
   recovery: {
     title: '恢复文件',
+    dialogTitle: '恢复的文件要保存到哪里？',
+    dialogDescription: '将把 {{count}} 个文件（{{size}}）恢复到您选择的位置。',
+    dialogPickHint: '浏览选择具体文件夹',
+    tabLocal: '本地磁盘',
+    tabCloud: '云端',
+    cloudUnavailableTitle: '云端位置暂不可用',
+    cloudUnavailableBody:
+      '云存储需要恢复引擎支持。连接器提供该能力后，选项会出现在这里——我们不会虚假标注不可用的功能。',
     destination: '文件要保存到哪里？',
     destinationHint: '强烈建议保存到正在恢复的驱动器以外的位置。',
     local: '本机',

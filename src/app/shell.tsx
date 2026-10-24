@@ -193,8 +193,6 @@ export function WizardShell(): React.JSX.Element {
                   {t('home.scanningHint')}
                 </button>
               ) : null}
-              <SidebarSection label={t('nav.settings')} />
-              <SidebarLink to="/settings" icon={SettingsIcon} labelKey="nav.settings" end />
             </>
           )}
           <div className="mt-auto space-y-0.5">
@@ -229,7 +227,7 @@ function DevSurfaces(): React.JSX.Element {
 
 function SidebarSection({ label }: { label: string }): React.JSX.Element {
   return (
-    <div className="px-4 pb-1 pt-4 text-2xs font-semibold uppercase tracking-wide text-foreground-disabled">
+    <div className="px-4 pb-1 pt-4 text-2xs font-semibold uppercase tracking-wide text-foreground-secondary">
       {label}
     </div>
   );

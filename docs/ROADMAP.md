@@ -9,7 +9,21 @@
 - All 9 wizard surfaces with loading/empty/error/partial states.
 - Virtualized results (tree + list), bounded preview workers, recovery queue
   with hard overlap refusal, SMART + transactional repair, sessions.
-- 52 tests green, Playwright golden path, browser-verified with evidence.
+- 59 tests green, Playwright golden path, browser-verified with evidence.
+
+## Session 2 (a11y + acceptance + corpus cross-check) — DONE
+
+- CI/release failure triage: stale tag → broken Rust compile path fixed
+  (`std::env::consts::OS/ARCH/FAMILY`); re-tagged and released.
+- Acceptance suite in CI: axe audits (21 × theme), DPI ladder, scroll-frame
+  budget, zh-CN/long-string stress, frontend cold load — all green.
+- Corpus cross-check (VLM + evidence): destination selection rebuilt as the
+  corpus modal; scan-live collapsed to the single bottom bar with the
+  Recover-All CTA; dark-theme slots re-read from themdark.ini and corrected;
+  derived AA text pairs added with tracked deviations; raw-i18n-key leak
+  fixed with a resource-integrity test.
+- VLM comparison evidence: `scripts/vlm-crosscheck/` (structural equivalence
+  for home/scan/complete/results/destination/zh; verdicts in VISUAL-ACCEPTANCE).
 
 ## Next: engine integration session
 
@@ -26,6 +40,9 @@
 4. **Measured budgets on real hardware**: re-run grid #34–44 (1 M rows,
    filter <200 ms, preview <500 ms, cold start <2 s, DPI ladders) against
    the engine, not the simulator.
+5. **Destination row risk marks**: when the engine's mount-point DTO carries
+   device association, pre-mark same-source rows with the corpus warning icon
+   (today the refusal is surfaced by validateDestination on selection).
 
 ## v0.2 candidates
 

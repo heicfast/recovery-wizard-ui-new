@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "Based on the screenshot of the EaseUS Data Recovery Wizard:\n\n(1) **BOTTOM**. The scan progress gauge (showing \"21%\") and the status bar are located at the very bottom of the application window.\n\n(2) **Left to right, the bottom bar contains:**\n*   **Progress Circle:** A circular gauge displaying the percentage complete (21%).\n*   **Status Text:** The text \"Advanced Scanning , Files Found: 1139159 (146.29 GB)\".\n*   **Playback Controls:** Pause/Stop buttons (|| and square icons).\n*   **Time Remaining:** Text reading \"Remaining time: 13m38s\".\n*   **Sector Info:** Text reading \"Reading sector: 32317440/313413598\".\n*   **History Icon:** A clock icon on the far right side, just before the blue button.\n*   **Action Button:** A large blue button labeled \"Recover All ...\".\n\n(3) At the top of the content area sits a **toolbar** containing:\n*   A **View Toggle** (List icon).\n*   A **Filter** button with a funnel icon.\n*   A **Search Bar** with the placeholder text \"Search files or folders\" and a magnifying glass icon.\n\n(4) The left tree pane displays three main branch groups (representing different recovery categories):\n1.  **Windows (C):** (Expanded, showing 1.1M items)\n2.  **File Path Lost:** (Showing 4.3K items)\n3.  **Reconstructed:** (Showing 2 items)\n\nAdditionally, there are two tabs labeled **Path** and **Type** located directly above this tree list.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1792832225,
+  "id": "20261024165701735dcb322a3b478e",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261024165701735dcb322a3b478e",
+  "usage": {
+    "completion_tokens": 356,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1094,
+    "prompt_tokens_details": {
+      "cached_tokens": 5
+    },
+    "total_tokens": 1450
+  }
+}

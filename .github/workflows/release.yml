@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -51,11 +55,23 @@ jobs:
           INSTALLER=$(find src-tauri/target/release/bundle/nsis -name '*.exe' | head -n 1)
           if [ -z "$INSTALLER" ]; then
             echo "NSIS installer not found in src-tauri/target/release/bundle/nsis" >&2
-            ls -R src-tauri/target/release/bundle || true
+            find src-tauri/target/release/bundle -type f > bundle-diagnostic.txt 2>/dev/null || true
+            ls -R src-tauri/target/release/bundle >> bundle-diagnostic.txt || true
             exit 1
           fi
           echo "INSTALLER_PATH=$INSTALLER" >> "$GITHUB_ENV"
           echo "Found: $INSTALLER"
+
+      - name: Upload bundle diagnostics (failure only)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-diagnostics
+          path: |
+            bundle-diagnostic.txt
+            src-tauri/target/release/bundle/**
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Generate checksum
         shell: bash

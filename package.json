@@ -24,7 +24,7 @@
     "icons": "tauri icon src-tauri/app-icon.png",
     "arch:lint": "node scripts/arch-lint.mjs",
     "knip": "knip",
-    "jscpd": "jscpd src --min-tokens 70 --reporters consoleFull",
+    "jscpd": "jscpd src --min-tokens 70 --reporters consoleFull --threshold 1",
     "bundle:check": "node scripts/bundle-check.mjs"
   },
   "dependencies": {
@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@ast-grep/cli": "0.51.0",
+    "@axe-core/playwright": "4.14.0",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.1",
     "@rolldown/plugin-babel": "0.2.4",

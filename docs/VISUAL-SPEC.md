@@ -43,6 +43,23 @@ Windows HC light/dark — near-black/white canvas, 1px fully-saturated borders, 
 gradients, focus ring = 2px solid accent. Marked ESTIMATED-derived (reference has
 Theme submenu = system/light/dark only; HC parity is our accessibility floor, grid #17).
 
+### 1a. Derived text-safe pairs (session-2 cross-check, tracked deviations)
+
+The corpus slots below are the reference's *decorative* accent colors; used as
+small-text colors they fail WCAG AA (our floor, rule 4). Evidence slots are kept
+for non-text accents; these derived companions carry the text role:
+
+| Token                 | Light     | Dark      | Basis / measured contrast                                       |
+| --------------------- | --------- | --------- | --------------------------------------------------------------- |
+| `--success-foreground` | `#157a4b` | `#4ad47f` | slot 59 (#30b373) is 2.7:1 on white — derived pair ≥4.5:1       |
+| `--warning-foreground`| `#9a5400` | `#ffd07e` | slot 46 on slot 45 measures 2.96:1 — reference pair, our AA floor wins |
+
+Dark-theme corrections to slot-faithful values (re-read from themdark.ini
+[dark] during the session-2 cross-check): `--surface-muted` `#32383e`
+(slots 15/22/43 — the implementation had shipped a darker recessed value),
+`--danger-muted` `#652c2d` (slot 38), `--danger-pressed` `#ff8c8c` (slot 39),
+`--warning-muted` `#805207` (slot 45).
+
 ## 2. Typography
 
 Base family stack (CFG/QSS `[style]`): `Segoe UI, Microsoft YaHei, Meiryo UI, Malgun

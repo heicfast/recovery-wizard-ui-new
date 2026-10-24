@@ -114,7 +114,7 @@ export function HealthPage(): React.JSX.Element {
               className={cn(
                 'size-8',
                 health.data.status === 'good'
-                  ? 'text-success'
+                  ? 'text-success-foreground'
                   : health.data.status === 'caution'
                     ? 'text-warning'
                     : 'text-danger',

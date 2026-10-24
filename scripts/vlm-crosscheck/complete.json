@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "(1) Overall layout structure: MATCH. Both use a 3-pane layout (sidebar, file list, details/preview) with a centered modal overlay.\n(2) Information architecture: MATCH. Both display scan results in a modal with file counts and size, followed by a primary action button.\n(3) Color palette family: MATCH. Both utilize a light theme with a blue primary color for CTAs and neutral grays for backgrounds.\n(4) Typography scale: MATCH. Both use a large bold title for the status, medium-sized numbers for stats, and smaller text for labels.\n(5) Control geometry: DIFF. Image 1 uses a 2-column grid for stats; Image 2 uses a 2x2 grid and includes \"Time used\" and \"Unreadable areas.\"\n(6) Primary CTA placement: MATCH. In both images, the primary CTA is centered at the bottom of the modal dialog.\n\nVERDICT: STRUCTURALLY_EQUIVALENT. While the internal arrangement of statistics within the modal differs slightly, the overall spatial organization, component hierarchy, and visual language are consistent.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1792832162,
+  "id": "20261024165556ce7cbe74d9c442ac",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261024165556ce7cbe74d9c442ac",
+  "usage": {
+    "completion_tokens": 230,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 2432,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 2662
+  }
+}

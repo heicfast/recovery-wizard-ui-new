@@ -151,7 +151,7 @@ function DatePicker(): React.JSX.Element {
         </p>
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label htmlFor="date-from" className="mb-1 text-2xs text-foreground-disabled">
+            <Label htmlFor="date-from" className="mb-1 text-2xs text-foreground-secondary">
               {t('results.dateFrom')}
             </Label>
             <Input
@@ -163,7 +163,7 @@ function DatePicker(): React.JSX.Element {
             />
           </div>
           <div>
-            <Label htmlFor="date-to" className="mb-1 text-2xs text-foreground-disabled">
+            <Label htmlFor="date-to" className="mb-1 text-2xs text-foreground-secondary">
               {t('results.dateTo')}
             </Label>
             <Input
@@ -213,7 +213,7 @@ function SizePicker(): React.JSX.Element {
             value={f.sizeMin ?? ''}
             onChange={(e) => f.setSizePreset('custom', e.target.value, undefined)}
           />
-          <span className="text-xs text-foreground-disabled">MB —</span>
+          <span className="text-xs text-foreground-secondary">MB —</span>
           <Input
             aria-label={t('results.dateTo')}
             type="number"
@@ -223,7 +223,7 @@ function SizePicker(): React.JSX.Element {
             value={f.sizeMax ?? ''}
             onChange={(e) => f.setSizePreset('custom', undefined, e.target.value)}
           />
-          <span className="text-xs text-foreground-disabled">MB</span>
+          <span className="text-xs text-foreground-secondary">MB</span>
         </div>
       </div>
     </div>

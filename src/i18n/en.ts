@@ -296,6 +296,15 @@ export const en = {
   },
   recovery: {
     title: 'Recover files',
+    dialogTitle: 'Where should the recovered files be saved?',
+    dialogDescription:
+      '{{count}} files ({{size}}) will be recovered to the location you choose.',
+    dialogPickHint: 'Browse for a specific folder',
+    tabLocal: 'Local disks',
+    tabCloud: 'Cloud',
+    cloudUnavailableTitle: 'Cloud destinations are not available yet',
+    cloudUnavailableBody:
+      'Cloud storage needs the recovery engine. Options will appear here as soon as the connector provides them — we will not pretend otherwise.',
     destination: 'Where should files be saved?',
     destinationHint:
       'Saving to a different drive than the one you are recovering from is strongly recommended.',

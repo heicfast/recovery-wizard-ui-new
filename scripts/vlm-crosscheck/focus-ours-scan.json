@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "Based on the screenshot of the data-recovery app:\n\n(1) The scan progress gauge/indicator cluster is at the **BOTTOM** of the window.\n\n(2) The elements in the bottom bar (from left to right) are:\n*   **Status/Results summary:** \"Results so far 9K files · 9 KB\"\n*   **Action buttons (Right-aligned):** \"Save this search\" and \"Recover all...\"\n*   **Progress Cluster:** A circular progress spinner, \"Overall progress: 0.3%\", file/data found stats, and scan speed/time remaining.\n*   **Control buttons (Far right):** \"Pause\" and \"Stop\".\n\n(3) At the top of the content area sits a **toolbar** containing navigation buttons (Home, Back, Refresh), a location breadcrumb (\"By location > 9K files\"), view toggle icons (List/Grid), a \"Filter\" button, and a \"Search by name\" field. Above this toolbar is the blue progress/status bar indicating the current scan stage (\"scan_stage.volume-analysis 0.3%\").\n\n(4) The left tree pane shows a hierarchical file structure under the main branch **\"Existing files\"** (displaying a total of 180K items). The sub-branches (folders) listed include: Temp, February, Media, office, Data, client, vacation, Work, birthday, 2024年项项..., August, Camera, and Archive. There are also two view tabs at the very top of this pane: **\"By location\"** (currently active) and **\"By type\"**.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1792832250,
+  "id": "202610241657210e641ea7ea304379",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202610241657210e641ea7ea304379",
+  "usage": {
+    "completion_tokens": 330,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1318,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 1648
+  }
+}

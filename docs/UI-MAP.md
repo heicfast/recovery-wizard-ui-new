@@ -41,6 +41,9 @@ Back-navigation follows the wizard stack (Home ⇄ every page; results keeps a
 
 Transitions: cross-fade 160ms; scan→results is explicit via celebration modal CTA
 (auto-dismiss optional); disconnect error → inline reconnect prompt, not a route change.
+Scan-live renders a SINGLE bottom bar (gauge · stage/stats · pause/stop ·
+Recover-All CTA, gated by the contract's `recoverableDuringScan`); the results
+status bar returns once the scan completes.
 
 ## 2. Pages, controls, and states
 
@@ -124,13 +127,21 @@ text). Failure = diagnostic reason from connector error code (never generic).
 States: loading (bounded worker), ready, unsupported (reason), failed (reason),
 partial (truncated notice when bounded).
 
-### 2.6 Recovery (Queue + Destination + Report)
+### 2.6 Recovery (Destination dialog → Queue → Report)
 
-Zones: queue list (per-item state icons, collision-naming policy selector, folder
-reconstruction + empty-folder preservation toggles), destination section (volume
-rows with free-space bars + same-source warning, folder picker, manual path input
-with live validation), progress panel (per-file + overall, cancel, hash-verify
-indicator), report dialog (success/partial/failed with reasons, export).
+Destination selection is a **modal over the results surface** (corpus
+recovery-destdlg-*): header (title + selection stats), Local/Cloud tabs,
+radio rows (drive icon + label + used-of-total stats), "Choose folder…" row
+(connector pickDirectory, source-excluding hint), manual path with live
+connector validation, Save (disabled until the connector validates; the
+overlap refusal is a hard gate the UI cannot override) + Cancel footer.
+The Cloud tab is a truthful unavailable state (no contract capability yet).
+Save navigates to the queue/report page which autostarts after validation.
+
+Zones (queue/report page): queue list (per-item state icons, collision-naming
+policy selector, folder reconstruction + empty-folder preservation toggles),
+progress panel (per-file + overall, cancel, hash-verify indicator), report
+(success/partial/failed with reasons, export).
 
 States: validating destination, overlap-refused (hard gate — reason from
 `validateDestination`; UI cannot override), insufficient-space (preflight from

@@ -54,7 +54,7 @@ The contract is specified in `src/connector/contract.ts` and documented in
 ## Quality gates (all green at v0.1.0)
 
 `tsc --noEmit` · ESLint (0 errors) · Prettier · arch-lint + ast-grep · knip ·
-jscpd · 52/52 tests · production build · bundle budget (main 86 KB / 200 KB
+jscpd · 59/59 tests · production build · bundle budget (main 86 KB / 200 KB
 gzip; total 301 KB / 500 KB) · Playwright golden path with console-error
 assertions · browser-verified end-to-end (evidence screenshots in worklog).
 

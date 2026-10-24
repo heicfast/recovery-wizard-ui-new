@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "(1) Overall layout structure: MATCH. Both use a three-pane layout with a navigation sidebar on the left, a central file list, and a details/preview pane on the right.\n(2) Information architecture: MATCH. Both place the file tree in the left sidebar, the main data grid (Name, Date/Modified, Type) in the center, and item-specific actions or previews in the right panel.\n(3) Color palette family: MATCH. Both utilize a light theme with white backgrounds, light gray borders, and primary blue accents for buttons and selected states.\n(4) Typography scale: MATCH. Both use a clear hierarchy with bold headers for columns and standard-weight text for the file list entries and metadata.\n(5) Control geometry: MATCH. Both feature a dense list view with row-height consistency, similar checkbox placement on the left of each item, and a prominent blue action button at the bottom right.\n(6) Primary CTA placement: MATCH. The \"Recover All\" / \"全部恢复...\" button is positioned at the far right of the bottom status/action bar in both interfaces.\n\nVERDICT: STRUCTURALLY_EQUIVALENT. The re-implementation accurately mirrors the spatial organization, component hierarchy, and visual weight of the original product interface.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1792832180,
+  "id": "20261024165614a6730b6bfcad4bdc",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20261024165614a6730b6bfcad4bdc",
+  "usage": {
+    "completion_tokens": 260,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 2432,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 2692
+  }
+}

@@ -38,8 +38,15 @@
 
   /* Semantic */
   --success: #30b373;
+  /* Text/icon-safe green: slot-59 green fails AA as small text (2.7:1 on
+   * white) — derived token, documented in VISUAL-SPEC §1. */
+  --success-foreground: #157a4b;
   --success-muted: #e5f5ed;
   --warning: #d4760b;
+  /* Slot 46 text on slot 45 bg measures 2.96:1 — below our AA floor. Derived
+   * AA pair, deviation documented in VISUAL-SPEC §1 (evidence slots kept for
+   * non-text accents). */
+  --warning-foreground: #9a5400;
   --warning-muted: #fff3d1;
   --warning-amber: #ffc10e;
   --danger: #f72c2c;
@@ -100,7 +107,9 @@
   --background-gradient-from: #1b1d1f;
   --background-gradient-to: #18191b;
   --surface: #202428;
-  --surface-muted: #1a1d20;
+  /* themdark.ini [dark] slot 15/22/43 — muted strips/wells read lighter than
+   * surface in the reference dark theme, not darker. */
+  --surface-muted: #32383e;
   --surface-tint: #282f38;
   --surface-hover: #2a323c;
   --surface-selected: #284a7f;
@@ -121,13 +130,18 @@
   --focus-ring-offset: #14161a;
 
   --success: #349a37;
+  --success-foreground: #4ad47f;
   --success-muted: #1c2a1e;
   --warning: #ff7342;
-  --warning-muted: #33201a;
+  /* Warning chip pairing (slots 45 bg + 51/52 text): amber text on amber bg.
+   * Slot-51 amber is 4.35:1 on slot-45 bg — brightened to clear AA. */
+  --warning-muted: #805207;
+  --warning-foreground: #ffd07e;
   --warning-amber: #e29100;
   --danger: #ff5a5a;
-  --danger-muted: #3a2223;
-  --danger-pressed: #ff8080;
+  /* [dark] slot 38 muted / slot 39 pressed */
+  --danger-muted: #652c2d;
+  --danger-pressed: #ff8c8c;
 
   --border: #434851;
   --border-inner: #404c63;
@@ -163,7 +177,9 @@
   --border-inner: #000000;
   --border-strong: #000000;
   --success: #00783a;
+  --success-foreground: #00783a;
   --warning: #8a5300;
+  --warning-foreground: #8a5300;
   --danger: #c50f1f;
   --shadow-card: none;
   --shadow-overlay: none;
@@ -194,7 +210,10 @@
   --border-inner: #ffffff;
   --border-strong: #ffffff;
   --success: #4ad47f;
+  --success-foreground: #4ad47f;
   --warning: #ffb84d;
+  /* Slot-45 amber bg (inherited from dark) needs the AA-bright pair. */
+  --warning-foreground: #ffd07e;
   --danger: #ff8080;
 }
 

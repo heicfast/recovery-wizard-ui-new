@@ -237,3 +237,69 @@ screenshots verify2-01..05.
 
 Windows-only gates (NSIS, cargo, Playwright-on-Windows, DPI) re-armed on the
 tagged commit via Release/UI-Smoke/CI runs.
+
+---
+Task ID: S2 (continuation session)
+Agent: main (product engineer)
+
+Task: Continue remaining implementation; fix failing CI + release; re-verify
+everything; cross-check documentation vs corpus screenshots and fix all gaps.
+
+Work Log:
+- Triage: latest main CI/Smoke were green; both Release runs failed. Root cause
+  #1: tag `v0.1.0-ui-mock` points at a pre-fix commit whose Rust shell used
+  `std::env::consts::os/arch/family` (lowercase) — the NSIS build failed on
+  windows-latest. Root cause #2 (earlier run): tag/version mismatch, already
+  fixed on main. Rust fix verified on main by CI cargo-check/clippy/tauri
+  debug link job; the tag was simply stale.
+- Local baseline re-verified from scratch: pnpm 12.15.0 frozen install,
+  typecheck, eslint (0 errors), prettier, arch-lint, ast-grep (CI's per-rule
+  + negation-glob invocations), knip 0, jscpd, 59/59 vitest, build, bundle
+  budget 89.8/200 KB main · 315/500 KB total.
+- Remaining-implementation build-out (was deferred as PARTIAL): added
+  `e2e/acceptance.spec.ts` — axe-core WCAG 2.0/2.1 A+AA audits on every
+  stable surface × light/dark/hc (21 audits), DPI ladder 100–200 % (CSS
+  viewport ladder 1920→960 px with window-min clamp semantics), virtualized
+  scroll rAF frame budget, zh-CN live-locale stress with long/CJK fixture
+  names, frontend cold-load measurement; screenshot corpus (43 files) as CI
+  artifacts. `@axe-core/playwright` 4.14.0 pinned.
+- axe audit found and I fixed 10 real defects (details + evidence in
+  VISUAL-ACCEPTANCE session-2 section): nested-interactive on device cards
+  (restructured frame/radio/sibling-actions + arrow-key radiogroup nav),
+  systemic foreground-disabled misuse for meta text, status green/amber
+  failing AA (derived text-safe token pairs, slots kept for accents),
+  virtualized grid missing columnheader/gridcell/rowgroup roles + aria-sort,
+  icon-only view toggle without accessible names, raw i18n key leak in the
+  scan status strip (new SCAN_STAGE_I18N_KEYS map + resource-integrity test
+  for both locales).
+- Corpus cross-check (VLM pairwise vs ui-screenshots): home, scan-live,
+  celebration, results, destination, zh results. Confirmed STRUCTURAL
+  EQUIVALENCE for celebration/results/zh; fixed two real divergences:
+  (a) scan-live stacked two bottom bars → single corpus bar
+  (gauge · stats · pause/stop · Recover-All, contract-gated by
+  recoverableDuringScan; results status bar returns post-completion);
+  (b) destination selection was a full page → rebuilt as the corpus modal
+  (Local/Cloud tabs, radio rows + capacity stats, Choose-folder row,
+  connector-validated Save, truthful unavailable Cloud tab, autostart into
+  the queue/report). Post-fix VLM verdicts: MATCH on both surfaces.
+- Token evidence pass against themdark.ini (sparse-pulled): dark
+  surface-muted corrected to #32383e (slots 15/22/43), danger-muted #652c2d
+  (slot 38), danger-pressed #ff8c8c (slot 39), warning-muted #805207
+  (slot 45); warning chip pairing uses the slot-51/52 amber family with AA
+  adjustments, documented as tracked deviations in VISUAL-SPEC §1a.
+- Workflow hardening: removed `continue-on-error` from tauri-debug-build
+  (SOP: no masked failures), jscpd now threshold-gated at 1 % (baseline
+  0.40 %), concurrency groups added, release.yml gets a failure-path bundle
+  diagnostics artifact, CI gains workflow_dispatch.
+- Specs updated to the new dialog flow; full local gate chain green:
+  59/59 vitest · eslint 0 errors (2 documented library notices) · prettier ·
+  knip 0 · jscpd 0.40 % (rc 0) · 9/9 Playwright (smoke + acceptance).
+
+Stage Summary:
+- All previously-PARTIAL acceptance items that are CI-measurable are now
+  PASS with recorded evidence; remaining hardware items are explicitly
+  re-measured on Windows runners by the smoke job.
+- Interface now matches the corpus structure on every audited surface;
+  deviations are documented with rationale (UI-MAP §0/§2, VISUAL-SPEC §1a).
+- Next: push, re-tag v0.1.0-ui-mock on the verified HEAD, watch the Release
+  workflow produce the unsigned NSIS installer + checksums + GitHub Release.

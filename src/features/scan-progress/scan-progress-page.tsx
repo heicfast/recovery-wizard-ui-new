@@ -34,6 +34,7 @@ import {
 import { ResultsExplorer } from '@/features/results-explorer/results-explorer';
 import { toast } from 'sonner';
 import { ResultsPageFallback } from '@/features/results-explorer/page-fallback';
+import { SCAN_STAGE_I18N_KEYS } from '@/i18n';
 
 /**
  * Scan Progress — the 3-pane results layout live during the scan, plus the
@@ -99,6 +100,14 @@ export function ScanProgressPage(): React.JSX.Element {
     return <ResultsPageFallback />;
   }
 
+  const stage = progress?.stage ?? 'volume-analysis';
+  const stageLabel =
+    status === 'paused'
+      ? t('scan.pausedTitle')
+      : stage === 'done'
+        ? t('scan.completedTitle')
+        : t(SCAN_STAGE_I18N_KEYS[stage]);
+
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* Scan banner strip */}
@@ -119,11 +128,7 @@ export function ScanProgressPage(): React.JSX.Element {
               status === 'running' && 'animate-status-pulse',
             )}
           />
-          <span className="font-medium">
-            {status === 'paused'
-              ? t('scan.pausedTitle')
-              : t(`scan.stage.${progress?.stage ?? 'volume-analysis'}`)}
-          </span>
+          <span className="font-medium">{stageLabel}</span>
           <span className="tabular">{formatPercent(overall, i18n.language)}</span>
           <span className="ml-auto truncate text-xs opacity-80">
             {t('scan.liveResultsNote')}
@@ -138,6 +143,7 @@ export function ScanProgressPage(): React.JSX.Element {
           targetId={targetId}
           liveMode={!completed}
           recoverableDuringScan={progress?.recoverableDuringScan ?? false}
+          hideStatusBar={!completed}
         />
       </div>
 
@@ -229,6 +235,24 @@ export function ScanProgressPage(): React.JSX.Element {
             >
               <SquareIcon aria-hidden />
               {t('scan.stop')}
+            </Button>
+          ) : null}
+          {/* Recover-All CTA lives in the scan cluster per the corpus
+              bottom-bar composition (gauge · status · controls · CTA). */}
+          {!completed ? (
+            <Button
+              variant="primary"
+              size="lg"
+              className="ml-auto"
+              onClick={() => void navigate(`/recover/${scanId}?all=1`)}
+              disabled={!(progress?.recoverableDuringScan ?? false)}
+              title={
+                !(progress?.recoverableDuringScan ?? false)
+                  ? t('scan.recoverNowUnsafe')
+                  : undefined
+              }
+            >
+              {t('results.status.recoverAll')}
             </Button>
           ) : null}
         </div>
@@ -324,7 +348,7 @@ export function ScanProgressPage(): React.JSX.Element {
           className="w-[540px] max-w-[92vw] rounded-xl p-6 text-center"
           aria-label={t('scan.completedTitle')}
         >
-          <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-full bg-success-muted text-success">
+          <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-full bg-success-muted text-success-foreground">
             <PartyPopperIcon className="size-7" strokeWidth={1.5} aria-hidden />
           </div>
           <DialogTitle className="text-hero font-semibold">

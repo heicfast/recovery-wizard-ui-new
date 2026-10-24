@@ -190,6 +190,15 @@ export const NAME_STEMS: readonly string[] = [
   'receipt',
   'contract',
   'letter',
+  /* Realistic long names for layout stress (grid #47): camera-default
+   * prefixes, export pipelines, and human-titled documents all produce
+   * 60–120-char stems on real volumes. */
+  'DSC00425_2024-06-11_14-32-08_final-edit-v3',
+  'Q3-financial-consolidated-statement-external-audit-working-papers',
+  'IMG_20240611_143208_PXI逆向工程流程复盘会议纪要与行动计划',
+  'annual-performance-review-2024-self-assessment-final-approved',
+  'unreal-engine-5.4-project-backup-2024-06-11-full-with-megascans',
+  'scan-results-sector-map-volume-3-detailed-annotation-table',
 ];
 
 export const DIR_NAMES: readonly string[] = [
@@ -213,6 +222,10 @@ export const DIR_NAMES: readonly string[] = [
   'Temp',
   'Shared',
   'Media',
+  /* Long CJK/mixed directory names for tree-stress (grid #47). */
+  '2024年度项目归档-包含已删除的旧版本',
+  'system-volume-information-restore-logs',
+  '客户交付物-最终版本-请勿删除-备份完整',
   'Movies',
   'Records',
   '2023',

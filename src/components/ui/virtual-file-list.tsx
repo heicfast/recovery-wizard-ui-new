@@ -49,26 +49,38 @@ function SortHeader({
       : ArrowDownIcon
     : ChevronsUpDownIcon;
   return (
-    <button
-      type="button"
-      onClick={() => onSort(field)}
-      aria-label={`${label} — ${active ? (currentDirection === 'asc' ? t('a11y.sortDescending') : t('a11y.sortAscending')) : t('a11y.sortAscending')}`}
-      className={cn(
-        'flex h-8 select-none items-center gap-1 border-b border-border px-3 text-xs font-semibold text-foreground-secondary transition-colors hover:bg-surface-hover/50 hover:text-foreground',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset',
-        align === 'right' && 'justify-end',
-      )}
+    <div
+      role="columnheader"
+      className={cn('border-b border-border', align === 'right' && 'flex justify-end')}
       style={{ width }}
+      aria-sort={
+        currentField === field
+          ? currentDirection === 'asc'
+            ? 'ascending'
+            : 'descending'
+          : 'none'
+      }
     >
-      <span className="truncate">{label}</span>
-      <Icon
+      <button
+        type="button"
+        onClick={() => onSort(field)}
+        aria-label={`${label} — ${active ? (currentDirection === 'asc' ? t('a11y.sortDescending') : t('a11y.sortAscending')) : t('a11y.sortAscending')}`}
         className={cn(
-          'size-3 shrink-0',
-          active ? 'opacity-90' : 'opacity-0 group-hover/column:opacity-40',
+          'flex h-8 w-full select-none items-center gap-1 px-3 text-xs font-semibold text-foreground-secondary transition-colors hover:bg-surface-hover/50 hover:text-foreground',
+          'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset',
+          align === 'right' && 'justify-end',
         )}
-        aria-hidden
-      />
-    </button>
+      >
+        <span className="truncate">{label}</span>
+        <Icon
+          className={cn(
+            'size-3 shrink-0',
+            active ? 'opacity-90' : 'opacity-0 group-hover/column:opacity-40',
+          )}
+          aria-hidden
+        />
+      </button>
+    </div>
   );
 }
 
@@ -165,6 +177,7 @@ export function VirtualFileList({
         role="row"
       >
         <div
+          role="columnheader"
           className="flex items-center justify-center border-b border-border"
           style={{ width: COLUMN_WIDTHS.checkbox }}
         >
@@ -224,9 +237,9 @@ export function VirtualFileList({
       </div>
       <div
         ref={ref}
+        role="rowgroup"
         className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
         tabIndex={0}
-        aria-label={t('results.column.name')}
       >
         <div
           style={{
@@ -273,6 +286,7 @@ export function VirtualFileList({
                 onDoubleClick={() => onRowDoubleClick(node)}
               >
                 <div
+                  role="gridcell"
                   className="flex h-full items-center justify-center"
                   style={{ width: COLUMN_WIDTHS.checkbox }}
                   onClick={(e) => e.stopPropagation()}
@@ -284,6 +298,7 @@ export function VirtualFileList({
                   />
                 </div>
                 <div
+                  role="gridcell"
                   className="flex h-full items-center gap-2 px-3"
                   style={{ width: COLUMN_WIDTHS.name }}
                 >
@@ -293,6 +308,7 @@ export function VirtualFileList({
                   </span>
                 </div>
                 <div
+                  role="gridcell"
                   className="flex h-full items-center px-3 text-foreground-secondary"
                   style={{ width: COLUMN_WIDTHS.modified }}
                 >
@@ -301,6 +317,7 @@ export function VirtualFileList({
                   </span>
                 </div>
                 <div
+                  role="gridcell"
                   className="flex h-full items-center px-3 text-foreground-secondary"
                   style={{ width: COLUMN_WIDTHS.type }}
                 >
@@ -309,12 +326,14 @@ export function VirtualFileList({
                   </span>
                 </div>
                 <div
+                  role="gridcell"
                   className="flex h-full items-center justify-end px-3 tabular"
                   style={{ width: COLUMN_WIDTHS.size }}
                 >
                   {formatBytes(node.sizeBytes, i18n.language)}
                 </div>
                 <div
+                  role="gridcell"
                   className="flex h-full items-center px-3"
                   style={{ width: COLUMN_WIDTHS.condition }}
                 >

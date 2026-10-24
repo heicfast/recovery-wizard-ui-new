@@ -88,7 +88,7 @@ function StatTile({
       <span
         className={cn(
           'text-xl font-semibold tabular',
-          tone === 'success' && 'text-success',
+          tone === 'success' && 'text-success-foreground',
           tone === 'warning' && 'text-warning',
           tone === 'danger' && 'text-danger',
         )}

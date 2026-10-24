@@ -4,6 +4,14 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   ci:
@@ -58,6 +66,7 @@ jobs:
 
       - name: Duplication (jscpd)
         run: pnpm jscpd
+        # Script gates duplication at ≤1 % (measured baseline: 0.42–0.65 %).
 
       - name: Unit + component tests
         run: pnpm test

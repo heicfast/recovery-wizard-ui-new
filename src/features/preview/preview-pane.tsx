@@ -126,7 +126,7 @@ export function PreviewPane({
           ) : null}
         </>
       ) : (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 p-6 text-center text-foreground-disabled">
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 p-6 text-center text-foreground-secondary">
           <ImageIcon className="size-8" strokeWidth={1.25} aria-hidden />
           <p className="text-xs">{t('preview.title')}</p>
         </div>
@@ -454,7 +454,7 @@ function HexPreview({
           <tbody>
             {rows.map((r) => (
               <tr key={r.offset}>
-                <td className="pr-3 text-foreground-disabled">
+                <td className="pr-3 text-foreground-secondary">
                   {r.offset.toString(16).padStart(8, '0')}
                 </td>
                 <td className="whitespace-pre pr-3">{r.hex}</td>

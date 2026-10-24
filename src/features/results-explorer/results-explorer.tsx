@@ -41,6 +41,8 @@ import {
 } from '@/components/ui/menus';
 import { FilterBar } from './filter-bar';
 import { PreviewPane } from '@/features/preview/preview-pane';
+import { DestinationDialog } from '@/features/recovery-queue/destination-dialog';
+import { useScanSessionStore } from '@/stores/scan-session-store';
 import { toast } from 'sonner';
 
 /**
@@ -54,11 +56,14 @@ export function ResultsExplorer({
   targetId: _targetId,
   liveMode = false,
   recoverableDuringScan = true,
+  hideStatusBar = false,
 }: {
   scanId: string;
   targetId: string;
   liveMode?: boolean;
   recoverableDuringScan?: boolean;
+  /** Live scan embeds its own status cluster (corpus: one bottom bar). */
+  hideStatusBar?: boolean;
 }): React.JSX.Element {
   void _targetId;
   const { t, i18n } = useTranslation();
@@ -98,6 +103,16 @@ export function ResultsExplorer({
     [rows, selection.selected],
   );
 
+  // Destination dialog (corpus: the recover CTA opens the destination
+  // modal over the results surface, not a bare route change).
+  const [destDialog, setDestDialog] = React.useState<{
+    ids: readonly string[];
+    all: boolean;
+  } | null>(null);
+  const sourceTargetId = useScanSessionStore((s) =>
+    scanId ? (s.known[scanId]?.targetId ?? null) : null,
+  );
+
   const onRowClick = (node: ResultNode, index: number, e: React.MouseEvent): void => {
     setActiveNodeId(node.id);
     if (e.shiftKey) {
@@ -121,12 +136,7 @@ export function ResultsExplorer({
 
   const onRecover = (ids?: readonly string[]): void => {
     const finalIds = ids ?? Array.from(selection.selected);
-    if (finalIds.length === 0) {
-      // Recover-all path
-      void navigate(`/recover/${scanId}?all=1`);
-      return;
-    }
-    void navigate(`/recover/${scanId}?ids=${finalIds.slice(0, 500).join(',')}`);
+    setDestDialog(finalIds.length > 0 ? { ids: finalIds, all: false } : { ids: [], all: true });
   };
 
   const treeModeLabel: Record<ResultTreeMode, string> = {
@@ -219,8 +229,18 @@ export function ResultsExplorer({
           value={ui.viewMode}
           onChange={(v) => ui.setViewMode(v)}
           options={[
-            { value: 'details', label: '', icon: ListIcon },
-            { value: 'icons', label: '', icon: LayoutGridIcon },
+            {
+              value: 'details',
+              label: '',
+              srLabel: t('results.views.details'),
+              icon: ListIcon,
+            },
+            {
+              value: 'icons',
+              label: '',
+              srLabel: t('results.views.icons'),
+              icon: LayoutGridIcon,
+            },
           ]}
         />
         <Button
@@ -388,49 +408,75 @@ export function ResultsExplorer({
         ) : null}
       </div>
 
-      {/* Bottom status bar */}
-      <div className="flex h-14 shrink-0 items-center justify-between gap-4 border-t border-border bg-surface px-4">
-        <div className="flex min-w-0 items-center gap-3 text-sm">
-          {liveMode ? (
-            <Badge variant="warning" className="animate-status-pulse">
-              {t('scan.liveResults')}
-            </Badge>
-          ) : null}
-          <span className="truncate tabular text-foreground-secondary">
-            {selectedCount > 0
-              ? `${t('results.selection.count', { count: selectedCount })} · ${formatBytes(selectedBytes, i18n.language)}`
-              : t('results.status.found', {
-                  count: formatCountCompact(total, i18n.language),
-                  size: formatBytes(totalOf(pages.data?.pages), i18n.language),
-                })}
-          </span>
+      {/* Bottom status bar (hidden during live scan — the scan cluster
+          owns the single bottom bar per the corpus state machine) */}
+      {!hideStatusBar ? (
+        <div className="flex h-14 shrink-0 items-center justify-between gap-4 border-t border-border bg-surface px-4">
+          <div className="flex min-w-0 items-center gap-3 text-sm">
+            {liveMode ? (
+              <Badge variant="warning" className="animate-status-pulse">
+                {t('scan.liveResults')}
+              </Badge>
+            ) : null}
+            <span className="truncate tabular text-foreground-secondary">
+              {selectedCount > 0
+                ? `${t('results.selection.count', { count: selectedCount })} · ${formatBytes(selectedBytes, i18n.language)}`
+                : t('results.status.found', {
+                    count: formatCountCompact(total, i18n.language),
+                    size: formatBytes(totalOf(pages.data?.pages), i18n.language),
+                  })}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                saveSession.mutate(null, {
+                  onSuccess: () => toast.success(t('results.session.saved')),
+                })
+              }
+            >
+              <SaveIcon aria-hidden />
+              {t('results.session.save')}
+            </Button>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => onRecover()}
+              disabled={liveMode && !recoverableDuringScan}
+              title={
+                liveMode && !recoverableDuringScan ? t('scan.recoverNowUnsafe') : undefined
+              }
+            >
+              {selectedCount > 0
+                ? t('results.status.recoverSelected', { count: selectedCount })
+                : t('results.status.recoverAll')}
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() =>
-              saveSession.mutate(null, {
-                onSuccess: () => toast.success(t('results.session.saved')),
-              })
-            }
-          >
-            <SaveIcon aria-hidden />
-            {t('results.session.save')}
-          </Button>
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => onRecover()}
-            disabled={liveMode && !recoverableDuringScan}
-            title={liveMode && !recoverableDuringScan ? t('scan.recoverNowUnsafe') : undefined}
-          >
-            {selectedCount > 0
-              ? t('results.status.recoverSelected', { count: selectedCount })
-              : t('results.status.recoverAll')}
-          </Button>
-        </div>
-      </div>
+      ) : null}
+
+      {destDialog !== null ? (
+        <DestinationDialog
+          open
+          onOpenChange={(o) => {
+            if (!o) setDestDialog(null);
+          }}
+          sourceTargetId={sourceTargetId}
+          estimatedBytes={destDialog.all ? null : selectedBytes}
+          fileCount={destDialog.all ? null : destDialog.ids.length}
+          onConfirmed={(destPath) => {
+            const ids = destDialog.ids;
+            const all = destDialog.all;
+            setDestDialog(null);
+            const query = all ? `all=1` : `ids=${ids.slice(0, 500).join(',')}`;
+            void navigate(
+              `/recover/${scanId}?${query}&dest=${encodeURIComponent(destPath)}&autostart=1`,
+            );
+          }}
+        />
+      ) : null}
     </div>
   );
 }

@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import type { CollisionPolicy, RecoveryOptions } from '@/connector/contract';
+import type {
+  CollisionPolicy,
+  DestinationValidation,
+  RecoveryOptions,
+} from '@/connector/contract';
 import {
   ArrowLeftIcon,
   CheckCircle2Icon,
@@ -54,6 +58,11 @@ export function RecoveryPage(): React.JSX.Element {
 
   const recoverAll = params.has('all');
   const selection = useSelectionStore();
+  // Destination dialog (results surface) passes the validated destination
+  // plus an autostart flag: corpus flow = Save → recovery proceeds.
+  const destParam = params.get('dest');
+  const autostart = params.has('autostart');
+  const autostartDone = React.useRef(false);
 
   const nodeIds = React.useMemo(() => {
     const urlIds = params.get('ids')?.split(',').filter(Boolean) ?? [];
@@ -80,7 +89,7 @@ export function RecoveryPage(): React.JSX.Element {
     scanId ? s.known[scanId]?.targetId : null,
   );
 
-  const [destination, setDestination] = React.useState('');
+  const [destination, setDestination] = React.useState(destParam ?? '');
   const [validation, setValidation] = React.useState<{
     allowed: boolean;
     reason?: 'overlap' | 'unwritable' | 'invalid' | 'out-of-space';
@@ -109,6 +118,35 @@ export function RecoveryPage(): React.JSX.Element {
     return null;
   }, [items.data, nodeIds.length]);
 
+  // Shared validation callbacks: the dialog-arrival effect issues the same
+  // connector mutation directly (no synchronous setState inside the effect).
+  const validationCallbacks = (path: string) => ({
+    onSuccess: (v: DestinationValidation) => {
+      setValidation(v);
+      if (
+        autostart &&
+        !autostartDone.current &&
+        v.allowed &&
+        !startRecovery.data &&
+        !startRecovery.isPending
+      ) {
+        autostartDone.current = true;
+        startRecovery.mutate(
+          { nodeIds, destination: path, options },
+          { onError: (err) => toast.error(err.message) },
+        );
+      }
+    },
+    onError: () =>
+      setValidation({
+        allowed: false,
+        reason: 'invalid',
+        freeBytes: null,
+        neededBytes: null,
+      }),
+    onSettled: () => setValidating(false),
+  });
+
   const validate = (path: string): void => {
     if (!path) {
       setValidation(null);
@@ -117,19 +155,21 @@ export function RecoveryPage(): React.JSX.Element {
     setValidating(true);
     validateDestination.mutate(
       { path, neededBytes: estimatedBytes ?? allTotal * 2_400_000 },
-      {
-        onSuccess: (v) => setValidation(v),
-        onError: () =>
-          setValidation({
-            allowed: false,
-            reason: 'invalid',
-            freeBytes: null,
-            neededBytes: null,
-          }),
-        onSettled: () => setValidating(false),
-      },
+      validationCallbacks(path),
     );
   };
+
+  // Validate the dialog-chosen destination on arrival (destination state is
+  // initialized from the param — no synchronous setState needed here).
+  React.useEffect(() => {
+    if (destParam) {
+      validateDestination.mutate(
+        { path: destParam, neededBytes: 0 },
+        validationCallbacks(destParam),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-once prefill
+  }, []);
 
   const jobStatus = jobQuery.data?.status ?? (jobId ? 'running' : null);
 

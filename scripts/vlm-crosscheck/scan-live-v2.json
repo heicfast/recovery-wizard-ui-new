@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "**Dimension 1: Location of the progress gauge cluster (bottom bar)**\nVerdict: **MATCH**\n*Analysis:* Both images place the primary progress/status bar at the very bottom of the application window, spanning the full width.\n\n**Dimension 2: Bottom bar composition left-to-right (gauge, stage/status text, pause/stop controls, large blue Recover-All CTA on the right)**\nVerdict: **MATCH**\n*Analysis:* Both layouts follow an identical left-to-right sequence:\n1.  **Left:** A circular progress gauge (showing percentage).\n2.  **Center-Left:** Status text describing the current scan stage and statistics (e.g., \"Advanced Scanning\" / \"Overall progress\", file counts).\n3.  **Center-Right:** Action controls for pausing/stopping the process (Image 1 uses icons; Image 2 uses labeled buttons, but the functional position is identical).\n4.  **Far Right:** A large, prominent blue \"Recover All...\" CTA button.\n\n**Dimension 3: Top toolbar (view toggle, filter, search)**\nVerdict: **MATCH**\n*Analysis:* Both interfaces feature a top horizontal toolbar containing view toggles (list/grid icons), a \"Filter\" button/dropdown, and a search input field on the right side. The spatial arrangement and component types are consistent.\n\n**Dimension 4: Left tree with Path/Type tabs**\nVerdict: **MATCH**\n*Analysis:* Both images feature a navigation pane on the far left that organizes results hierarchically. This pane is topped with tabs to switch between different organization modes (Image 1: \"Path\" / \"Type\"; Image 2: \"By location\" / \"By type\"). The structural role and placement are equivalent.\n\n***\n\n**Final Verdict: STRUCTURALLY_EQUIVALENT**",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1792833958,
+  "id": "202610241725517734e1d3438e4a10",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202610241725517734e1d3438e4a10",
+  "usage": {
+    "completion_tokens": 379,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 2403,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 2782
+  }
+}

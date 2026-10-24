@@ -79,15 +79,20 @@ test('golden path: scan → results → recover', async ({ page }) => {
     .click();
   await page.screenshot({ path: 'test-results/40-preview.png' });
 
-  // 9. Recover the selection
+  // 9. Recover the selection — the destination dialog opens over the results
   await page.getByRole('button', { name: /recover 1 item/i }).click();
-  await expect(page.getByRole('heading', { name: /recover files/i })).toBeVisible();
+  const destDialog = page.getByRole('dialog', { name: /where should the recovered files/i });
+  await expect(destDialog).toBeVisible();
+  await page.screenshot({ path: 'test-results/45-destination-dialog.png' });
 
-  // 10. Choose destination and start
-  await page.getByRole('button', { name: /choose folder/i }).click();
-  await page.getByRole('button', { name: /recover 1 item/i }).click();
+  // 10. Pick a destination row (connector validates), then Save → autostart
+  await destDialog.getByRole('radio', { name: /choose folder/i }).click();
+  await expect(destDialog.getByRole('button', { name: /^save$/i })).toBeEnabled({
+    timeout: 5_000,
+  });
+  await destDialog.getByRole('button', { name: /^save$/i }).click();
 
-  // 11. Report appears
+  // 11. Report appears (recovery autostarts from the dialog choice)
   const report = page.getByRole('status').filter({ hasText: /recovery finished/i });
   await expect(report).toBeVisible({ timeout: 60_000 });
   await page.screenshot({ path: 'test-results/50-report.png' });

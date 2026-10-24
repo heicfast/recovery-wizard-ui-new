@@ -7,7 +7,8 @@
 | Unit         | Vitest 4.1.12                             | formatters, RNG determinism, stores, node-space index                                |
 | Contract     | Vitest                                    | mock connector lifecycle/timing/injections, tauri stub behavior                      |
 | Component    | Vitest + Testing Library                  | theme provider, primitives a11y (progressbar roles, labels), state components        |
-| UI smoke     | Playwright 1.64.1 (`e2e/smoke.spec.ts`)   | golden path against the built app served by `vite preview`, console-error assertions |
+| UI smoke     | Playwright 1.64.1 (`e2e/smoke.spec.ts`)   | golden path incl. destination dialog, console-error assertions |
+| Acceptance   | Playwright (`e2e/acceptance.spec.ts`)    | axe WCAG 2.0/2.1 A+AA per surface × theme (21 audits), DPI ladder 100–200 %, scroll-frame budget, zh-CN + long-string stress, frontend cold-load |
 | Architecture | arch-lint + ast-grep + eslint zones       | connector boundary, no raw invoke, feature isolation                                 |
 | Static       | tsc --noEmit, prettier, knip, jscpd       | types, style, dead code, duplication                                                 |
 | Rust         | cargo check + clippy (CI, windows-latest) | shell compiles clean                                                                 |
@@ -15,7 +16,7 @@
 ## Running locally
 
 ```
-pnpm test              # unit + contract + component (52 tests)
+pnpm test              # unit + contract + component (59 tests)
 pnpm test:coverage     # with v8 coverage
 pnpm e2e               # Playwright smoke (builds nothing; serves `dist` via preview)
 pnpm typecheck && pnpm lint && pnpm arch:lint && pnpm bundle:check
@@ -44,17 +45,21 @@ pnpm typecheck && pnpm lint && pnpm arch:lint && pnpm bundle:check
   (color never the only signal).
 - Playwright drives the full path via accessible roles/names only — the
   smoke suite doubles as a keyboard/AT operability check.
-- Known gap → roadmap: an automated axe pass per route (the manual keyboard
-  walkthrough was done during live verification).
+- `@axe-core/playwright` audits every stable surface in light, dark and
+  high-contrast; serious/critical findings fail CI (session 2: 0 across 21
+  audits — the audit itself found and drove the fixes in VISUAL-ACCEPTANCE).
+- `tests/i18n-stages.test.ts` guards resource integrity for the ScanStage
+  labels in both locales (regression test for the raw-key leak).
 
 ## CI matrix
 
 - `ci.yml` (windows-latest): frozen install → typecheck → lint → format →
   arch (3 layers) → knip → jscpd → vitest → build → bundle budget →
   cargo check + clippy → artifact upload.
-- `ui-smoke.yml`: preview-server Playwright run + step screenshots +
-  reports; a secondary job proves the Tauri debug bundle links
-  (`tauri build --debug --bundles none`).
+- `ui-smoke.yml`: preview-server Playwright run (smoke + acceptance suite)
+  + screenshot corpus upload + reports; a secondary job proves the Tauri
+  debug bundle links (`tauri build --debug --no-bundle`) — hard-gated, no
+  `continue-on-error` masking.
 - `release.yml` (tag `v*`): version match gate, NSIS bundle, SHA-256,
   unsigned-artifact disclosure in release notes.
 

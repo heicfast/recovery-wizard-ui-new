@@ -30,9 +30,11 @@
   --color-primary-muted: var(--accent-muted);
   --color-primary-muted-border: var(--accent-muted-border);
   --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-success-muted: var(--success-muted);
   --color-warning: var(--warning);
   --color-warning-muted: var(--warning-muted);
+  --color-warning-foreground: var(--warning-foreground);
   --color-danger: var(--danger);
   --color-danger-muted: var(--danger-muted);
   --color-border: var(--border);

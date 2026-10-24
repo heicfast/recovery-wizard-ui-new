@@ -12,6 +12,7 @@ function Segmented<T extends string>({
   options: readonly {
     value: T;
     label: string;
+    srLabel?: string;
     icon?: React.ComponentType<{ className?: string }>;
   }[];
   value: T;
@@ -37,6 +38,8 @@ function Segmented<T extends string>({
             type="button"
             role="radio"
             aria-checked={active}
+            aria-label={opt.srLabel}
+            title={opt.srLabel}
             onClick={() => onChange(opt.value)}
             className={cn(
               'inline-flex h-7 items-center gap-1.5 rounded-sm px-2.5 text-xs font-medium transition-colors outline-none',
